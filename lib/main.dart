@@ -8,7 +8,8 @@ import 'package:flutter/foundation.dart' show kIsWeb;
 import 'package:flutter/material.dart';
 import 'package:window_size/window_size.dart';
 
-import 'styles.dart';
+// import 'styles.dart';                             // Remove 'styles.dart' import
+import 'title_screen/title_screen.dart'; // Add this import
 
 void main() {
   if (!kIsWeb && (Platform.isWindows || Platform.isLinux || Platform.isMacOS)) {
@@ -26,14 +27,15 @@ class NextGenApp extends StatelessWidget {
     return MaterialApp(
       themeMode: ThemeMode.dark,
       darkTheme: ThemeData(brightness: Brightness.dark),
-      home: Scaffold(
-        body: Center(
-          child: Text(
-            'Insert Next-Generation UI Here...',
-            style: TextStyles.h2,
-          ),
-        ),
-      ),
+      home: const TitleScreen(), // Replace with this widget
+      // home: Scaffold(
+      //   body: Center(
+      //     child: Text(
+      //       'Insert Next-Generation UI Here...',
+      //       style: TextStyles.h2,
+      //     ),
+      //   ),
+      // ),
     );
   }
 }
