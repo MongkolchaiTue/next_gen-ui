@@ -6,6 +6,7 @@ import 'dart:io' show Platform;
 
 import 'package:flutter/foundation.dart' show kIsWeb;
 import 'package:flutter/material.dart';
+import 'package:flutter_animate/flutter_animate.dart'; // Add this import
 import 'package:window_size/window_size.dart';
 
 // import 'styles.dart';                             // Remove 'styles.dart' import
@@ -16,6 +17,7 @@ void main() {
     WidgetsFlutterBinding.ensureInitialized();
     setWindowMinSize(const Size(800, 500));
   }
+  Animate.restartOnHotReload = true; // Add this line
   runApp(const NextGenApp());
 }
 

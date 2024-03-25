@@ -1,5 +1,6 @@
 import 'package:extra_alignments/extra_alignments.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_animate/flutter_animate.dart'; // Add this import
 import 'package:gap/gap.dart';
 import 'package:focusable_control_builder/focusable_control_builder.dart'; // Add import
 
@@ -86,10 +87,12 @@ class _TitleText extends StatelessWidget {
             Image.asset(AssetPaths.titleSelectedLeft, height: 65),
             Text('57', style: TextStyles.h2),
             Image.asset(AssetPaths.titleSelectedRight, height: 65),
-          ],
-        ),
-        Text('INTO THE UNKNOWN', style: TextStyles.h3),
-      ],
+          ], // Edit from here...
+        ).animate().fadeIn(delay: .8.seconds, duration: .7.seconds),
+        Text('INTO THE UNKNOWN', style: TextStyles.h3)
+            .animate()
+            .fadeIn(delay: 1.seconds, duration: .7.seconds),
+      ], // to here.
     );
   }
 }
@@ -115,19 +118,28 @@ class _DifficultyBtns extends StatelessWidget {
           selected: difficulty == 0,
           onPressed: () => onDifficultyPressed(0),
           onHover: (over) => onDifficultyFocused(over ? 0 : null),
-        ),
+        )
+            .animate() // Add from here...
+            .fadeIn(delay: 1.3.seconds, duration: .35.seconds)
+            .slide(begin: const Offset(0, .2)), // to here
         _DifficultyBtn(
           label: 'Normal',
           selected: difficulty == 1,
           onPressed: () => onDifficultyPressed(1),
           onHover: (over) => onDifficultyFocused(over ? 1 : null),
-        ),
+        )
+            .animate() // Add from here...
+            .fadeIn(delay: 1.5.seconds, duration: .35.seconds)
+            .slide(begin: const Offset(0, .2)), // to here
         _DifficultyBtn(
           label: 'Hardcore',
           selected: difficulty == 2,
           onPressed: () => onDifficultyPressed(2),
           onHover: (over) => onDifficultyFocused(over ? 2 : null),
-        ),
+        )
+            .animate() // Add from here...
+            .fadeIn(delay: 1.7.seconds, duration: .35.seconds)
+            .slide(begin: const Offset(0, .2)), // to here
         const Gap(20),
       ],
     );
@@ -160,12 +172,19 @@ class _DifficultyBtn extends StatelessWidget {
             child: Stack(
               children: [
                 /// Bg with fill and outline
-                Container(
-                  decoration: BoxDecoration(
-                    color: const Color(0xFF00D1FF).withOpacity(.1),
-                    border: Border.all(color: Colors.white, width: 5),
+                AnimatedOpacity(
+                  // Edit from here
+                  opacity: (!selected && (state.isHovered || state.isFocused))
+                      ? 1
+                      : 0,
+                  duration: .3.seconds,
+                  child: Container(
+                    decoration: BoxDecoration(
+                      color: const Color(0xFF00D1FF).withOpacity(.1),
+                      border: Border.all(color: Colors.white, width: 5),
+                    ),
                   ),
-                ),
+                ), // to here.
 
                 if (state.isHovered || state.isFocused) ...[
                   Container(
@@ -243,8 +262,15 @@ class _StartBtnState extends State<_StartBtn> {
                 ),
               ),
             ],
-          ),
-        );
+          )
+              .animate(
+                  autoPlay: false,
+                  onInit: (c) => _btnAnim = c) // Edit from here...
+              .shimmer(duration: .7.seconds, color: Colors.black),
+        )
+            .animate()
+            .fadeIn(delay: 2.3.seconds)
+            .slide(begin: const Offset(0, .2)); // to here.
       },
     );
   }
