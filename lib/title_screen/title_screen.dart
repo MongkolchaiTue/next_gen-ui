@@ -9,6 +9,7 @@ import '../orb_shader/orb_shader_widget.dart'; // And this import too
 import '../assets.dart';
 import '../styles.dart';
 import 'title_screen_ui.dart';
+import 'particle_overlay.dart'; // Add this import
 
 class TitleScreen extends StatefulWidget {
   const TitleScreen({super.key});
@@ -127,7 +128,7 @@ class _TitleScreenState extends State<TitleScreen>
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.black,
+      backgroundColor: Color.fromARGB(255, 0, 0, 0),
       body: Center(
         child: MouseRegion(
           onHover: _handleMouseMove,
@@ -193,6 +194,17 @@ class _TitleScreenState extends State<TitleScreen>
                     pulseEffect: _pulseEffect,
                     lightAmt: _finalEmitLightAmt,
                   ),
+
+                  /// Particle Field
+                  Positioned.fill(
+                    // Add from here...
+                    child: IgnorePointer(
+                      child: ParticleOverlay(
+                        color: orbColor,
+                        energy: _orbEnergy,
+                      ),
+                    ),
+                  ), // to here.
 
                   /// Fg-Rocks
                   Image.asset(AssetPaths.titleFgBase),
