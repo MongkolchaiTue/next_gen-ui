@@ -3,8 +3,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart'; // Add this import
 import 'package:gap/gap.dart';
 import 'package:focusable_control_builder/focusable_control_builder.dart'; // Add import
-
 import '../assets.dart';
+import 'package:provider/provider.dart'; // Add this import
+import '../common/shader_effect.dart'; // And this import
+import '../common/ticking_builder.dart'; // And this import
 import '../common/ui_scaler.dart';
 import '../styles.dart';
 
@@ -14,18 +16,18 @@ class TitleScreenUi extends StatelessWidget {
     required this.difficulty, // Edit from here...
     required this.onDifficultyPressed,
     required this.onDifficultyFocused,
+    required this.onStartPressed, // Add this argument
   });
 
   final int difficulty;
   final void Function(int difficulty) onDifficultyPressed;
   final void Function(int? difficulty) onDifficultyFocused; // to here.
+  final VoidCallback onStartPressed; // Add this attribute
 
   @override
   Widget build(BuildContext context) {
     return Padding(
-      // Move this const...
-      padding:
-          const EdgeInsets.symmetric(vertical: 40, horizontal: 50), // to here.
+      padding: const EdgeInsets.symmetric(vertical: 40, horizontal: 50),
       child: Stack(
         children: [
           /// Title Text
@@ -57,7 +59,7 @@ class TitleScreenUi extends StatelessWidget {
               alignment: Alignment.bottomRight,
               child: Padding(
                 padding: const EdgeInsets.only(bottom: 20, right: 40),
-                child: _StartBtn(onPressed: () {}),
+                child: _StartBtn(onPressed: onStartPressed), // Edit this line
               ),
             ),
           ), // to here.
@@ -72,7 +74,8 @@ class _TitleText extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Column(
+    Widget content = Column(
+      // Modify this line
       mainAxisSize: MainAxisSize.min,
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -94,6 +97,32 @@ class _TitleText extends StatelessWidget {
             .fadeIn(delay: 1.seconds, duration: .7.seconds),
       ], // to here.
     );
+
+    return Consumer<FragmentPrograms?>(
+      // Add from here...
+      builder: (context, fragmentPrograms, _) {
+        if (fragmentPrograms == null) return content;
+        return TickingBuilder(
+          builder: (context, time) {
+            return AnimatedSampler(
+              (image, size, canvas) {
+                const double overdrawPx = 30;
+                final shader = fragmentPrograms.ui.fragmentShader();
+                shader
+                  ..setFloat(0, size.width)
+                  ..setFloat(1, size.height)
+                  ..setFloat(2, time)
+                  ..setImageSampler(0, image);
+                Rect rect = Rect.fromLTWH(-overdrawPx, -overdrawPx,
+                    size.width + overdrawPx, size.height + overdrawPx);
+                canvas.drawRect(rect, Paint()..shader = shader);
+              },
+              child: content,
+            );
+          },
+        );
+      },
+    ); // to here.
   }
 }
 

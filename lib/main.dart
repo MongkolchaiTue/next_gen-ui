@@ -8,6 +8,8 @@ import 'package:flutter/foundation.dart' show kIsWeb;
 import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart'; // Add this import
 import 'package:window_size/window_size.dart';
+import 'package:provider/provider.dart'; // Add this import
+import 'assets.dart'; // Add this import
 
 // import 'styles.dart';                             // Remove 'styles.dart' import
 import 'title_screen/title_screen.dart'; // Add this import
@@ -18,7 +20,14 @@ void main() {
     setWindowMinSize(const Size(800, 500));
   }
   Animate.restartOnHotReload = true; // Add this line
-  runApp(const NextGenApp());
+  runApp(
+    // Edit from here...
+    FutureProvider<FragmentPrograms?>(
+      create: (context) => loadFragmentPrograms(),
+      initialData: null,
+      child: const NextGenApp(),
+    ),
+  ); // to here.
 }
 
 class NextGenApp extends StatelessWidget {
